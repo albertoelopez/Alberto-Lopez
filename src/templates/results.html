@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results - LyricLawyer{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📊 Analysis Results</h2>
+            <a href="/" class="btn btn-outline-primary">← Analyze New Lyrics</a>
+        </div>
+
+        <!-- Overall Risk Assessment -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="card-title mb-3">Overall Risk Assessment</h5>
+                        <span class="badge bg-{{ results.risk_color }} fs-6 mb-2">
+                            {{ results.overall_risk }} RISK
+                        </span>
+                        <p class="mb-2">
+                            <strong>{{ results.phrases_analyzed }}</strong> phrases analyzed • 
+                            <strong>{{ results.flagged_phrases }}</strong> flagged for review
+                        </p>
+                        <div class="progress mb-2" style="height: 8px;">
+                            <div class="progress-bar bg-{{ results.risk_color }}" 
+                                 style="width: {{ (results.confidence_score * 100)|round }}%"></div>
+                        </div>
+                        <small class="text-muted">
+                            Confidence: {{ (results.confidence_score * 100)|round }}%
+                        </small>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        {% if results.overall_risk == 'LOW' %}
+                            <div class="display-1 text-success">✅</div>
+                        {% elif results.overall_risk == 'MEDIUM' %}
+                            <div class="display-1 text-warning">⚠️</div>
+                        {% else %}
+                            <div class="display-1 text-danger">🚨</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flagged Phrases -->
+        {% if results.flagged_details %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">🚩 Flagged Phrases ({{ results.flagged_phrases }})</h5>
+            </div>
+            <div class="card-body">
+                {% for item in results.flagged_details %}
+                <div class="alert alert-{{ 'danger' if item.risk_level in ['HIGH', 'CRITICAL'] else 'warning' }} mb-3">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="alert-heading">
+                                "{{ item.phrase }}" 
+                                <span class="badge bg-{{ 'danger' if item.risk_level in ['HIGH', 'CRITICAL'] else 'warning' }}">
+                                    {{ item.risk_level }}
+                                </span>
+                            </h6>
+                            <p class="mb-2">{{ item.explanation }}</p>
+                            {% if item.matched_song and item.matched_artist %}
+                            <p class="mb-0">
+                                <strong>Potential match:</strong> "{{ item.matched_song }}" by {{ item.matched_artist }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <small class="text-muted">
+                                Line {{ item.line_number }}<br>
+                                Similarity: {{ (item.similarity_score * 100)|round }}%<br>
+                                Confidence: {{ (item.confidence * 100)|round }}%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Alternatives -->
+        {% if results.alternatives %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">💡 Suggested Alternatives</h5>
+            </div>
+            <div class="card-body">
+                {% for phrase, alt_data in results.alternatives.items() %}
+                <div class="mb-4">
+                    <h6>Original: "{{ phrase }}"</h6>
+                    <div class="ps-3">
+                        {% for alt in alt_data.alternatives[:3] %}
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-success me-2">✓</span>
+                            <span class="fw-bold">{{ alt.alternative }}</span>
+                        </div>
+                        <p class="text-muted small ps-4 mb-3">{{ alt.explanation }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- AI Analysis Report -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">🤖 AI Analysis Report</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ results.final_report|replace('
+', '<br>')|safe }}
+                </div>
+                
+                <details class="mt-3">
+                    <summary class="text-muted">View Agent Workflow Details</summary>
+                    <div class="mt-2">
+                        {% for agent, status in results.agent_workflow.items() %}
+                        <div class="d-flex justify-content-between align-items-center py-1">
+                            <span class="text-capitalize">{{ agent.replace('_', ' ') }}:</span>
+                            <span class="text-muted">{{ status }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Legal Disclaimer -->
+        <div class="card border-warning">
+            <div class="card-body">
+                <h6 class="card-title text-warning">⚖️ Legal Disclaimer</h6>
+                <p class="card-text small text-muted mb-0">
+                    This analysis provides guidance only and is not legal advice. For commercial releases 
+                    or serious concerns, please consult with a qualified music attorney. Results are based 
+                    on algorithmic analysis and may not detect all potential issues.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

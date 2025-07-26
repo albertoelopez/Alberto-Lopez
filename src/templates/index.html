@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3">🎵 LyricLawyer</h1>
+            <p class="lead text-muted">
+                AI-powered copyright compliance checker for songwriters
+            </p>
+            <p class="text-muted">
+                Analyze your lyrics for potential copyright issues and get original alternatives
+            </p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-4">📝 Enter Your Lyrics</h5>
+                
+                <form method="post" action="/analyze">
+                    <div class="mb-3">
+                        <textarea 
+                            class="form-control" 
+                            name="lyrics" 
+                            rows="10" 
+                            placeholder="Paste your song lyrics here...
+
+Example:
+Walking down the street tonight
+Stars are shining oh so bright
+Dancing to the rhythm of my heart
+This is where our story starts"
+                            required></textarea>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            🔍 Analyze for Copyright Issues
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">🤖</div>
+                    <h5>AI-Powered Analysis</h5>
+                    <p class="text-muted">Advanced algorithms + Gemini AI for comprehensive similarity detection</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">⚖️</div>
+                    <h5>Legal Guidance</h5>
+                    <p class="text-muted">Plain-English explanations of potential copyright concerns</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">✍️</div>
+                    <h5>Creative Alternatives</h5>
+                    <p class="text-muted">Original suggestions that preserve your artistic vision</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

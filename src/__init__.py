@@ -1,0 +1,1 @@
+# LyricLawyer - Agentic AI Copyright Compliance Checker

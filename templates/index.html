@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LyricLawyer - Copyright Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">🎵 LyricLawyer</h1>
+        <p class="text-center text-muted">AI-powered copyright compliance checker for songwriters</p>
+        
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        
+        <form method="post" action="/analyze" class="mb-4">
+            <div class="mb-3">
+                <label class="form-label">Enter your song lyrics:</label>
+                <textarea name="lyrics" class="form-control" rows="6" placeholder="Enter your lyrics here..." required>{{ lyrics or '' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze Lyrics</button>
+        </form>
+        
+        {% if results %}
+        <div class="card">
+            <div class="card-header">
+                <h3>Analysis Results</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h5>Overall Risk: 
+                            <span class="badge 
+                                {% if results.overall_risk == 'HIGH' %}bg-danger
+                                {% elif results.overall_risk == 'MEDIUM' %}bg-warning
+                                {% elif results.overall_risk == 'LOW' %}bg-info
+                                {% else %}bg-success{% endif %}">
+                                {{ results.overall_risk }}
+                            </span>
+                        </h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Phrases Analyzed:</strong> {{ results.phrases_analyzed }}</p>
+                        <p><strong>Potential Issues:</strong> {{ results.flagged_phrases }}</p>
+                    </div>
+                </div>
+                
+                {% if results.flagged_details %}
+                <h6>Flagged Phrases:</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Phrase</th>
+                                <th>Risk Level</th>
+                                <th>Similarity</th>
+                                <th>Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in results.flagged_details %}
+                            <tr>
+                                <td>{{ item.phrase }}</td>
+                                <td><span class="badge bg-warning">{{ item.risk_level }}</span></td>
+                                <td>{{ "%.1f"|format(item.similarity_score * 100) }}%</td>
+                                <td>{{ item.matched_reference }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <p class="text-muted">{{ results.analysis_summary }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="mt-5 text-center text-muted">
+            <p>Powered by multi-algorithm similarity detection • Google ADK framework ready</p>
+        </div>
+    </div>
+</body>
+</html>

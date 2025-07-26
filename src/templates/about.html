@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}About - LyricLawyer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="mb-4">About LyricLawyer</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">🎯 Mission</h5>
+                <p class="card-text">
+                    LyricLawyer helps songwriters avoid unintentional copyright infringement by 
+                    analyzing their lyrics for potential similarities to existing copyrighted material 
+                    and providing creative alternatives.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">🤖 Agentic AI Architecture</h5>
+                <p class="card-text">Built with Google's ADK framework featuring:</p>
+                <ul>
+                    <li><strong>Planner Agent:</strong> Breaks down analysis into systematic tasks</li>
+                    <li><strong>Similarity Agent:</strong> Detects copyright similarities using Gemini AI</li>
+                    <li><strong>Risk Agent:</strong> Assesses legal risk and provides recommendations</li>
+                    <li><strong>Alternatives Agent:</strong> Generates creative, original alternatives</li>
+                    <li><strong>Coordinator Agent:</strong> Orchestrates workflow and synthesizes results</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">🔬 Technology Stack</h5>
+                <ul class="mb-0">
+                    <li><strong>Google ADK:</strong> Agentic AI framework</li>
+                    <li><strong>Gemini API:</strong> Advanced language model for analysis</li>
+                    <li><strong>Multiple Algorithms:</strong> 8 similarity detection methods</li>
+                    <li><strong>FastAPI:</strong> Modern web framework</li>
+                    <li><strong>SQLite:</strong> Reference database for known songs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card border-info">
+            <div class="card-body">
+                <h5 class="card-title text-info">🏆 Hackathon Project</h5>
+                <p class="card-text mb-0">
+                    This project was created for the <strong>ODSC & Google Cloud Agentic AI Hackathon</strong> 
+                    to demonstrate innovative applications of multi-agent systems in creative industries.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
